@@ -1,7 +1,7 @@
 #ifndef FRAC_H
 #define FRAC_H
 
-typedef long long data_t;
+typedef int data_t;
 
 typedef struct {
     data_t num, den;

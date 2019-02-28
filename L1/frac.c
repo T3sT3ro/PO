@@ -1,5 +1,6 @@
 #include "frac.h"
 #include <malloc.h>
+#include <stddef.h>
 
 #define SGN(x) ((x) < 0 ? -1 : 1)
 #define ABS(x) ((x) < 0 ? -x : x)

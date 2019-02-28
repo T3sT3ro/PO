@@ -4,7 +4,7 @@
 #define pff(frac)                                  \
     do {                                           \
         frac_t* t = frac;                          \
-        printf("(%lld)/(%lld)\n", t->num, t->den); \
+        printf("(%d)/(%d)\n", t->num, t->den); \
     } while (0)
 
 int main() {
