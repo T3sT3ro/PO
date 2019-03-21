@@ -1,46 +1,52 @@
 // Double linked list
 
 using System;
-public class List<T> {
+public class List<T>
+{
     static readonly string emptyMsg = "List is empty.";
     static readonly string indexErrorMsg = "Invalid index.";
     private Node head, tail;
     private int size;
-    public class Node {
+    public class Node
+    {
         public T val;
         public Node prev, next;
 
         public Node(T val) { this.val = val; }
     }
 
-    public class Iterator {
+    public class Iterator
+    {
 
-        static readonly string iteratorNoPrevMsg = "Interator has no prev";
-        static readonly string iteratorNoNextMsg = "Interator has no next";
-        private Node node;
-
+        internal Node node;
         public Iterator(Node node) { this.node = node; }
 
         public T Value() { return node.val; }
-        public bool HasNext() { return node.next != null; }
-        public bool HasPrev() { return node.prev != null; }
+        public bool HasNext() { return IsValid() && node.next != null; }
+        public bool HasPrev() { return IsValid() && node.prev != null; }
 
-        public T Next() {
+        // returns true if iterator is broken and no further operation can be performed with it
+        public bool IsValid() { return node != null;}
+        public T Next()
+        {
             if (!HasNext())
-                throw new Exception(iteratorNoNextMsg);
+                node = null; // invalidate the iterator
             node = node.next;
             return node.prev.val;
         }
 
-        public T Prev() {
+        public T Prev()
+        {
             if (!HasPrev())
-                throw new Exception(iteratorNoNextMsg);
+                node = null; // invalidate the iterator
             node = node.prev;
             return node.next.val;
         }
+
     }
 
-    public List(int size = 0) {
+    public List(int size = 0)
+    {
         this.size = size;
         for (int i = 0; i < size; i++)
             PushBack(default(T));
@@ -48,36 +54,43 @@ public class List<T> {
 
     public int Size() { return size; }
     public bool Empty() { return size == 0; }
-    public void Clear() {
+    public void Clear()
+    {
         head = tail = null;
         size = 0;
     }
 
-    public T Front() {
+    public T Front()
+    {
         if (size == 0)
             throw new Exception(emptyMsg);
         return head.val;
     }
-    public T Back() {
+    public T Back()
+    {
         if (size == 0)
             throw new Exception(emptyMsg);
         return tail.val;
     }
-    public void PushFront(T val) {
+    public void PushFront(T val)
+    {
         Node newNode = new Node(val);
         if (size == 0)
             head = tail = newNode;
-        else {
+        else
+        {
             head.prev = new Node(val);
             head.prev.next = head;
             head = head.prev;
         }
         ++size;
     }
-    public void PushBack(T val) {
+    public void PushBack(T val)
+    {
         if (size == 0)
             head = tail = new Node(val);
-        else {
+        else
+        {
             tail.next = new Node(val);
             tail.next.prev = tail;
             tail = tail.next;
@@ -85,13 +98,17 @@ public class List<T> {
         ++size;
     }
 
-    public T PopFront() {
+    public T PopFront()
+    {
         if (size == 0)
             throw new Exception(emptyMsg);
         T val = head.val;
-        if (size == 1) {
+        if (size == 1)
+        {
             head = tail = null;
-        } else {
+        }
+        else
+        {
             head = head.next;
             head.prev = null;
         }
@@ -99,13 +116,17 @@ public class List<T> {
 
         return val;
     }
-    public T PopBack() {
+    public T PopBack()
+    {
         if (size == 0)
             throw new Exception(emptyMsg);
         T val = tail.val;
-        if (size == 1) {
+        if (size == 1)
+        {
             head = tail = null;
-        } else {
+        }
+        else
+        {
             tail = tail.prev;
             tail.next = null;
         }
@@ -114,7 +135,8 @@ public class List<T> {
         return val;
     }
 
-    public void Set(int index, T val) {
+    public void Set(int index, T val)
+    {
         if (index < 0 || index >= this.size)
             throw new ArgumentOutOfRangeException(indexErrorMsg);
         int it = -1;
@@ -125,7 +147,8 @@ public class List<T> {
         node.val = val;
     }
 
-    public T Get(int index) {
+    public T Get(int index)
+    {
         if (index < 0 || index >= this.size)
             throw new ArgumentOutOfRangeException(indexErrorMsg);
         int it = -1;
@@ -134,6 +157,28 @@ public class List<T> {
             node = node.next;
 
         return node.val;
+    }
+
+    // iterator will point to next, or prev if next doesn't exist
+    public void Remove(Iterator it)
+    {
+        if(!it.IsValid())
+            return;
+        
+        if(it.node == head) {
+            PopFront();
+            it.Next(); // advance iterator to next; might invalidate
+        }
+        else if (it.node == tail){
+             PopBack();
+            it.Prev(); // advance iterator to prev; might invalidate
+        }
+        else{
+            Node node = it.node;
+            node.prev.next = node.next;
+            node.next.prev = node.prev;
+            it.Next(); // point iterator to next of removed
+        }
     }
 
     public Iterator Head() { return new Iterator(head); }

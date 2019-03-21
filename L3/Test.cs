@@ -21,6 +21,10 @@ public class Program {
 
                 //---------------------
         Console.WriteLine("[Testing Map]");
+        Map<int, int> map = new Map<int, int>();
+        map.Set(1, 12);
+        map.Set(8,16);
+        //Console.WriteLine($"[0: ] [1: {map.Get(1)}] [8: {map.Get(8)}]");
         Console.WriteLine("[All OK]");
     }
 }
