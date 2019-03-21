@@ -21,26 +21,23 @@ public class List<T>
         internal Node node;
         public Iterator(Node node) { this.node = node; }
 
-        public T Value() { return node.val; }
+        public T At() { return node.val; }
+        // sets the value at node pointed to by Iterator to newValue
         public bool HasNext() { return IsValid() && node.next != null; }
         public bool HasPrev() { return IsValid() && node.prev != null; }
 
         // returns true if iterator is broken and no further operation can be performed with it
         public bool IsValid() { return node != null;}
-        public T Next()
+        public Iterator Next()
         {
-            if (!HasNext())
-                node = null; // invalidate the iterator
-            node = node.next;
-            return node.prev.val;
+            node = node.next; // might invalidate
+            return this;
         }
 
-        public T Prev()
+        public Iterator Prev()
         {
-            if (!HasPrev())
-                node = null; // invalidate the iterator
-            node = node.prev;
-            return node.next.val;
+            node = node.prev; // might invalidate
+            return this;
         }
 
     }

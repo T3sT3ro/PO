@@ -22,9 +22,15 @@ public class Program {
                 //---------------------
         Console.WriteLine("[Testing Map]");
         Map<int, int> map = new Map<int, int>();
+        Debug.Assert(!map.HasKey(1));
         map.Set(1, 12);
+        Debug.Assert(map.HasKey(1));
         map.Set(8,16);
-        //Console.WriteLine($"[0: ] [1: {map.Get(1)}] [8: {map.Get(8)}]");
+        Console.WriteLine($"[0: {map.HasKey(0)}, {map.Get(0)}] [1: {map.HasKey(1)}, {map.Get(1)}] [8: {map.HasKey(8)}, {map.Get(8)}]");
+        map.Set(0, 98);
+        map.Set(1,-7);
+        map.Remove(8);
+        Console.WriteLine($"[0: {map.HasKey(0)}, {map.Get(0)}] [1: {map.HasKey(1)}, {map.Get(1)}] [8: {map.HasKey(8)}, {map.Get(8)}]");
         Console.WriteLine("[All OK]");
     }
 }

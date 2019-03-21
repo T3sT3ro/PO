@@ -15,37 +15,45 @@ public class Map<K, V>
 
     private List<Pair> dict = new List<Pair>();
 
-    public V Get(K key)
+    /// Returns default of the type if key is not found
+    private List<Pair>.Iterator Seek(K key)
     {
         List<Pair>.Iterator it = dict.Head();
-        while (!it.Value().key.Equals(key) && it.HasNext())
-            it.Next();
 
-        if (!(it.Value().key.Equals(key)))
+        while (it.IsValid() && !it.At().key.Equals(key))
+            it.Next();
+        return it;
+    }
+
+    public V Get(K key)
+    {
+        List<Pair>.Iterator it = Seek(key);
+
+        if (it.IsValid())
+            return it.At().val;
+        else
             return default(V);
-        else return it.Value().val;
+
     }
 
     public void Set(K key, V val)
     {
-        List<Pair>.Iterator it = dict.Head();
-        while (!it.Value().key.Equals(key) && it.HasNext())
-            it.Next();
+        List<Pair>.Iterator it = Seek(key);
 
-        if (!(it.Value().key.Equals(key)))
-            return;
-
-        it.Value().val = val;
+        if (it.IsValid())
+            it.At().val = val;
+        else
+            dict.PushBack(new Pair(key, val));
     }
 
     public void Remove(K key)
     {
-        List<Pair>.Iterator it = dict.Head();
-        while (!it.Value().key.Equals(key) && it.HasNext())
-            it.Next();
+        List<Pair>.Iterator it = Seek(key);
 
-        if ((it.Value().key.Equals(key)))
+        if (it.IsValid() && it.At().key.Equals(key))
             dict.Remove(it);
     }
+
+    public bool HasKey(K key) => Seek(key).IsValid();
 
 }
