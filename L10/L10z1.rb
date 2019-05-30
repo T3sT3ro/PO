@@ -159,7 +159,7 @@ class Wyszukaj
         if dq.length == 0 then return nil end
         n = dq.find(0)
         while n != nil && n.val != x
-            n = n.next
+            n = n.next # akcesor Noda więc OK
         end
         return n != nil && n.val == x
     end
